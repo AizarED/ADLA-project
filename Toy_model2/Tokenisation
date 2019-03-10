@@ -1,0 +1,61 @@
+import torch
+from torch.autograd import Variable
+import numpy as np
+#import torch.functional as F
+import torch.nn.functional as F
+import torch.nn as N
+import matplotlib.pyplot as plt
+corpus = [
+    'he is a king',
+    'she is a queen',
+    'he is a man',
+    'she is a woman',
+    'warsaw is poland capital',
+    'berlin is germany capital',
+    'paris is france capital',   
+]
+
+def tokenize_corpus(corpus):
+    tokens = [x.split() for x in corpus]
+    return tokens
+
+tokenized_corpus = tokenize_corpus(corpus)
+
+### Tokenize movie text
+###
+f=open("movie_lines.txt", "r")
+
+def tokenize_corpus2(corpus2):
+    tokens2=[]
+    counter = 0
+    for x in corpus2:
+        s = x.split(" +++$+++ ")
+        part_S = s[-1]
+        separate = part_S.split()
+        #separate = separate.split("\n")
+        print('separate words:',separate)
+        tokens2.append(separate)
+        counter+=1
+        if counter>=70: #5404:
+            break
+    return tokens2
+    
+tokenized_corpus2=tokenize_corpus2(f)
+tokenized_corpus=tokenized_corpus2
+
+#print(*tokenized_corpus)
+
+vocabulary = []
+for sentence in tokenized_corpus:
+    for token in sentence:
+        if token not in vocabulary:
+            vocabulary.append(token)
+            
+print("\n full vocabulary: \n", vocabulary)
+
+word2idx = {w: idx for (idx, w) in enumerate(vocabulary)}
+idx2word = {idx: w for (idx, w) in enumerate(vocabulary)}
+
+vocabulary_size = len(vocabulary)
+print("dictionary of words: \n", word2idx)
+print("number of words in the dictionary", vocabulary_size)
