@@ -2,6 +2,7 @@
 Author: Aizar E. D. and Nicholas
 Nicholas: Fixed and optimised loading of movie_corpus
 Also inserted tokenise function with Class WordWindow Dataset
+Edited make_windows function such that short sentences are NOT missed!
 """
 
 import torch
@@ -17,36 +18,37 @@ import random
 
 # %%
 
-def small_corpus_tokeniser(corpus):
-    """Take in the list of sentences (lines as strings) and split those strings into a list of lowercase words"""
-    tokens = [x.translate(str.maketrans('', '', string.punctuation)).lower().split() for x in corpus]
-    tokens
-    return tokens
+#def small_corpus_tokeniser(corpus):
+#    """Take in the list of sentences (lines as strings) and split those strings into a list of lowercase words"""
+#    tokens = [x.translate(str.maketrans('', '', string.punctuation)).lower().split() for x in corpus]
+#    tokens
+#    return tokens
 # %% Open file and read, explicit encoding to prevent encoding/decoding error
 # Function to tokenise corpus
 def movie_corpus_tokeniser(corpus):
     ### IMPLEMENT
     tokens = []
-    counter = 0
+    #counter = 0
     for x in corpus:
         
         listed = x.split(' +++$+++ ')
         sentence = listed[-1].translate(str.maketrans('', '', string.punctuation)).lower()
         #sentence = sentence.translate(str.maketrans('', '', string.punctuation)).lower()
         words = sentence.split()
-        #print(words)
+        print(words)
         tokens.append(words)
         
         #if counter == 3767: Do not break
-           # break
-        counter +=1
+           #break
+        #counter +=1
 
     return tokens
     #currentFile = open(filename, 'rt', encoding='latin1')
-with open('movie_lines.txt','rt',encoding='latin1') as f: #closes file after all the lines have been processed
+'''with open('movie_lines.txt','rt',encoding='latin1') as f: #closes file after all the lines have been processed
     #for line in f: #not using readlines(), as this consumes the memory
-        #process(line)
-        movie_tokens = movie_corpus_tokeniser(f)    
+        #process(line)            tokenised_corpus = tokeniser(f)    
+
+       ' movie_tokens = movie_corpus_tokeniser(f)    '''
 
 
 # Will not use function below
@@ -67,7 +69,12 @@ def make_windows(text, window_size=5):
         print()
         print('Message index:', msg_idx)
         print('Message:', line)
+        if len(line)<5:
+            window_size = 2
+        else:
+            window_size = 5
         for idx in range(len(line) - window_size + 1):          # slide a window along the line until it reaches the end
+            #print("In the loop\n")
             window = line[idx: idx + window_size]               # get the words that fall into that window as a list
             print('Window idx:', idx, '\twindow:', window)
             windows.append(window)                              # add that list of tokens in a window to the list of windows
@@ -126,7 +133,9 @@ class WordWindowDataset(Dataset):
         self.idx2word= {v: k for k, v in self.word2idx.items()}                 # make dict to map the inverse
 
         #MAKE WINDOWS
+        print('-'*70)
         self.windows = make_windows(tokenised_corpus)                                     # make windows from the tokenised lines
+        print('-'*70)
         print('Number of windows:', len(self.windows))
 
 
@@ -151,7 +160,7 @@ class WordWindowDataset(Dataset):
     def __len__(self):
         return len(self.windows)
 
-text_file = 'movie_lines.txt'
+#text_file = 'movie_lines.txt'
 text_file = 'small_corpus.txt'
 
 dataset = WordWindowDataset(text_file)          # instantiate dataset
@@ -171,29 +180,32 @@ data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)          
 # %%
 
 ### Tokenize movie text
+##################################################################################################################################
 
-def tokenize_movie_corpus(corpus2):
-    tokens2=[]
-    counter = 0
-    for x in corpus2:
-        s = x.split(" +++$+++ ")
-        part_S = s[-1]
-        part_S = part_S.translate(str.maketrans('', '', string.punctuation)).lower()
-        print("Part_S:", part_S)
-        separate = part_S.split()
-        #separate = separate.split("\n")
-        ##print('separate words:',separate)
-        tokens2.append(separate)
-        counter += 1
-        if counter >= 1000:
-            break
-    return tokens2
+#def tokenize_movie_corpus(corpus2):
+#    tokens2=[]
+#    counter = 0
+#    for x in corpus2:
+#        s = x.split(" +++$+++ ")
+#        part_S = s[-1]
+#        part_S = part_S.translate(str.maketrans('', '', string.punctuation)).lower()
+#        print("Part_S:", part_S)
+#        separate = part_S.split()
+#        #separate = separate.split("\n")
+#        ##print('separate words:',separate)
+#        tokens2.append(separate)
+#        counter += 1
+#        if counter >= 1000:
+#            break
+#    return tokens2
 
+#################################################################################################################################
 '''
 with open("movie_lines.txt", "r") as f:
     tokenized_corpus2=tokenize_movie_corpus(f)
 
 tokenized_corpus=tokenized_corpus2
+#
 '''
 '''
 # HOW TORCH MODULES WORK - by the Berg
