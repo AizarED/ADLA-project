@@ -24,25 +24,7 @@ import random
 #    tokens
 #    return tokens
 # %% Open file and read, explicit encoding to prevent encoding/decoding error
-# Function to tokenise corpus
-def movie_corpus_tokeniser(corpus):
-    ### IMPLEMENT
-    tokens = []
-    #counter = 0
-    for x in corpus:
-        
-        listed = x.split(' +++$+++ ')
-        sentence = listed[-1].translate(str.maketrans('', '', string.punctuation)).lower()
-        #sentence = sentence.translate(str.maketrans('', '', string.punctuation)).lower()
-        words = sentence.split()
-        print(words)
-        tokens.append(words)
-        
-        #if counter == 3767: Do not break
-           #break
-        #counter +=1
 
-    return tokens
     #currentFile = open(filename, 'rt', encoding='latin1')
 '''with open('movie_lines.txt','rt',encoding='latin1') as f: #closes file after all the lines have been processed
     #for line in f: #not using readlines(), as this consumes the memory
@@ -55,11 +37,59 @@ def movie_corpus_tokeniser(corpus):
 
 #  Clean text 
 
-#def clean_text(text):
-#    text = text.lower()
-#    ### IMPLEMENT OTHER CLEANING FUNCTIONALITY (PUNCTUATION)
-#    return text
+def clean_text(line):
+    # text = text.lower() NOT needed!
+    ### IMPLEMENT OTHER CLEANING FUNCTIONALITY (PUNCTUATION)
+    
+    uncontract = {"i'm":"i am","i'll":"i will","i'd":"i would","i've":"i have",
+                  "you're":"you are","you'll":"you will","you'd":"you would",#"you've":"you have",
+                  "he's":"he is","he'll":"he will","he'd":"he would",#"he's":"he has",
+                  "she's":"she is","she'll":"she will","she'd":"she would",#"she's":"she has",
+                  "it's":"it is","it'll":"it will","it'd":"it would",#"it's":"it has",
+                  "we're":"we are","we'll":"we will","we'd":"we would","we've":"we have",
+                  "they're":"they are","they'll":"they will","they'd":"they would","they've":"they have",
+                  "that's":"that is","that'll":"that will","that'd":"that would","that's":"that has",
+                  "who's":"who is","who'll":"who will","who'd":"who would",#"who's":"who has",
+                  "what's":"what is","what're":"what are","what'll":"what will","what'd":"what would",
+                  "where's":"where is","where'll":"where will","where'd":"where would",
+                  "when's":"when is","when'll":"when will","when'd":"when would",
+                  "why's":"why is","why'll":"why will","why'd":"why would",
+                  "how's":"how is","how'll":"how will","how'd":"how would",
+                  "can't":"cannot","don't":"do not"} 
+   
+    for z in uncontract:
+        if z in line:
+            #print("suuuuuuuuuuuup")
+            line=line.replace(z,uncontract.get(z)) # not equivalent to x=z
+            
+    #newline.append(line)
+    #print("linessssssssssssssss",line)
+    return line
 
+
+# Function to tokenise corpus
+def movie_corpus_tokeniser(corpus):
+    ### IMPLEMENT
+    tokens = []
+    #counter = 0
+    for x in corpus:
+        
+        listed = x.split(' +++$+++ ')
+        sentence = listed[-1].lower()
+        #print("sentenceeeeeeeeeeeeeeee",sentence)
+        sentence = clean_text(sentence)
+        #print("sentenceeeeeeeeeeeeeeee",sentence)
+        sentence = sentence.translate(str.maketrans('', '', string.punctuation)).lower()
+        #print("sentenceeeeeeeeeeeeeeee",sentence)
+        words = sentence.split()
+        #print(words)
+        tokens.append(words)
+        
+        #if counter == 3767: Do not break
+           #break
+        #counter +=1
+
+    return tokens
 # %%
 
 def make_windows(text, window_size=5):
@@ -71,7 +101,7 @@ def make_windows(text, window_size=5):
         print('Message:', line)
         if len(line)<5:
             window_size = 2
-        else:
+      d our weaknesses.", "l666462 +++$+++ u9026 +++$+++ m616 +++$+++ boy-pullen +++$+++ why don 't the zulus attack?", 'l666368 +++$+++ u9025 +++$+++ m616 +++$+++ bloomfield +++$+++ one zulu is only one man.. ..and i am afeared of no one man... but the zulu, they come in the thousands.... like a black wave of death.... in the thousands.... and them assegais.... stabbing!', 'l666367 +++$+++ u9026 +++$+++ m616 +++$+++ boy-pullen +++$+++ you afeared of the zulus then, quartermaster?', 'l666366 +++$+++ u9025 +++$+++ m616 +++$+++ bloomfield +++$+  else:
             window_size = 5
         for idx in range(len(line) - window_size + 1):          # slide a window along the line until it reaches the end
             #print("In the loop\n")
@@ -111,14 +141,16 @@ class WordWindowDataset(Dataset):
 #            lines = f.read()                                    # read the file
 #        
 #        #print(lines)
-#        #lines = clean_text(lines)                               # clean the text
-#        #print(lines)
+        #lines = clean_text(tokenised_corpus)                    # clean the text
+        #print(tokenised_corpus)
 #        lines = lines.splitlines()                              # split the lines of the text
 #        #print(type(lines))
 #        #print(lines)
 #        tokens = tokeniser(lines)                               # convert text into tokens
 #        #print(tokens)
         vocab = []
+        print(tokenised_corpus)
+        zxcxzc
         #vocab = [word for message in lines for word in message.split()]         # flatten out corpus into list of words
         for sentence in tokenised_corpus:
             for words in sentence:
@@ -159,21 +191,26 @@ class WordWindowDataset(Dataset):
 
     def __len__(self):
         return len(self.windows)
-
-#text_file = 'movie_lines.txt'
-text_file = 'small_corpus.txt'
+        
+text_file = 'movie_lines.txt'
+#text_file = 'small_corpus.txt'
 
 dataset = WordWindowDataset(text_file)          # instantiate dataset
+
+# %%
 vocab_size = dataset.len_vocab                  # get length of dataset
-for item in dataset:
-    print(item)             # show an example
-    break
+
+#for item in dataset:
+#    print(item)             # show an example
+#    break
+
+# %%
 
 # HYPERPARAMETERS
 embedding_dims = 50                              # dimensionality of word embeddings
 lr = 0.001                                      # learning rate
 batch_size = 16
-
+# %%
 # CREATE DATALOADER
 data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)          # to shuffle and batch the examples
 
@@ -240,7 +277,7 @@ class Sequential():
 s = LogSoftmax()     # instantiate class
 print(s(10))    # call function is defined by __call__, so we can
 '''
-
+# %%
 # MAKE MODEL
 class SG_NN(torch.nn.Module):                                       # create class and inherit from torch.nn.Module
     def __init__(self):                                             # function run on instantiation
@@ -333,8 +370,6 @@ def train(epochs, ):
 train(2, data_in)
 
 # %%
-
-
 
 embedding_dims = 5 # 5 embedded neurons
 # W1 is center word weights vector
