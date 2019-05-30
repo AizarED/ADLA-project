@@ -101,7 +101,7 @@ def make_windows(text, window_size=5):
         print('Message:', line)
         if len(line)<5:
             window_size = 2
-      d our weaknesses.", "l666462 +++$+++ u9026 +++$+++ m616 +++$+++ boy-pullen +++$+++ why don 't the zulus attack?", 'l666368 +++$+++ u9025 +++$+++ m616 +++$+++ bloomfield +++$+++ one zulu is only one man.. ..and i am afeared of no one man... but the zulu, they come in the thousands.... like a black wave of death.... in the thousands.... and them assegais.... stabbing!', 'l666367 +++$+++ u9026 +++$+++ m616 +++$+++ boy-pullen +++$+++ you afeared of the zulus then, quartermaster?', 'l666366 +++$+++ u9025 +++$+++ m616 +++$+++ bloomfield +++$+  else:
+        else:
             window_size = 5
         for idx in range(len(line) - window_size + 1):          # slide a window along the line until it reaches the end
             #print("In the loop\n")
