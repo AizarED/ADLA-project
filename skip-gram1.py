@@ -42,7 +42,7 @@ def clean_text(line):
     ### IMPLEMENT OTHER CLEANING FUNCTIONALITY (PUNCTUATION)
     
     uncontract = {"i'm":"i am","i'll":"i will","i'd":"i would","i've":"i have",
-                  "you're":"you are","you'll":"you will","you'd":"you would",#"you've":"you have",
+                  "you're":"you are","you'll":"you will","you'd":"you would","you've":"you have",
                   "he's":"he is","he'll":"he will","he'd":"he would",#"he's":"he has",
                   "she's":"she is","she'll":"she will","she'd":"she would",#"she's":"she has",
                   "it's":"it is","it'll":"it will","it'd":"it would",#"it's":"it has",
