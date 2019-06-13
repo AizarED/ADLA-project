@@ -139,7 +139,7 @@ def loader(word, dict):
 
 # BUILD DATASET
 class WordWindowDataset(Dataset):
-    def __init__(self, text_file='small_corpus.txt', tokeniser=small_corpus_tokeniser, loader=loader, unloader=unloader, transform=None):
+    def __init__(self, text_file='small_corpus.txt', tokeniser=movie_corpus_tokeniser, loader=loader, unloader=unloader, transform=None):
         self.loader = loader
         self.unloader = unloader
         self.transform = transform
