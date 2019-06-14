@@ -86,9 +86,10 @@ def movie_corpus_tokeniser(corpus):
         #print("sentenceeeeeeeeeeeeeeee",sentence)
         sentence = sentence.translate(str.maketrans('', '', string.punctuation)).lower()
         #sentence=[(x.split(" +++$+++ ")[-1].translate(str.maketrans('','',string.punctuation)).lower()+" <EOL>").split() for i,x in enumerate(corpus,1) if i<13]
+        sentence = sentence + " <EOL>"
         #print("sentenceeeeeeeeeeeeeeee",sentence)
         words = sentence.split()
-        #print(words)
+        print(words)
         tokens.append(words)
         
         #if counter == 3767: Do not break
